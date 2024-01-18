@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql/mysql-server:8.0.23
+    container_name: mysql
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - db_data:/var/lib/mysql
+    env_file:
+      - ./scripts/docker/mysql.env
+    ports:
+      - '3306:3306'
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  flyway:
+    image: flyway/flyway:latest
+    container_name: flyway
+    restart: always
+    depends_on:
+      mysql:
+        condition: service_started
+    volumes:
+      - ${PWD}/scripts/flyway/conf/flyway.conf:/flyway/conf/flyway.conf
+      - ${PWD}/scripts/flyway/sql:/flyway/sql
+    command: -configFiles=/flyway/conf/flyway.conf -locations=filesystem:/flyway/sql -connectRetries=30 migrate
+
+volumes:
+  db_data: {}
