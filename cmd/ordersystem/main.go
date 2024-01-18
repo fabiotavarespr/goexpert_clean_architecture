@@ -49,8 +49,10 @@ func main() {
 	listOrderUseCase := NewListOrderUseCase(db, eventDispatcher)
 
 	webserver := webserver.NewWebServer(configs.WebServerPort)
-	webOrderHandler := NewWebOrderHandler(db, eventDispatcher)
-	webserver.AddHandler("/order", webOrderHandler.Create)
+	webCreateOrderHandler := NewWebCreateOrderHandler(db, eventDispatcher)
+	webListOrderHandler := NewWebListOrderHandler(db, eventDispatcher)
+	webserver.AddHandler("/order", webCreateOrderHandler.Create, http.MethodPost)
+	webserver.AddHandler("/order", webListOrderHandler.List, http.MethodGet)
 	fmt.Println("Starting web server on port", configs.WebServerPort)
 	go webserver.Start()
 
