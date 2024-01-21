@@ -6,6 +6,7 @@ package graph
 
 import (
 	"context"
+
 	"github.com/fabiotavarespr/goexpert_clean_architecture/internal/infra/graph/model"
 	"github.com/fabiotavarespr/goexpert_clean_architecture/internal/usecase"
 )

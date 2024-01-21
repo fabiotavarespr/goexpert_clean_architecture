@@ -63,5 +63,5 @@ grpc-install-mac: ## Install GRPC dependencies
 grpc-check: ## Check if grpc has installed
 	@protoc --version
 
-proto-generate: ## Generate proto
+grpc-generate: ## Generate proto
 	protoc --go_out=. --go-grpc_out=. internal/infra/grpc/protofiles/order.proto
