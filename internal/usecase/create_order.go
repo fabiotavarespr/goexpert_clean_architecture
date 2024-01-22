@@ -3,10 +3,10 @@ package usecase
 import (
 	"github.com/fabiotavarespr/goexpert_clean_architecture/internal/entity"
 	"github.com/fabiotavarespr/goexpert_clean_architecture/pkg/events"
+	"github.com/google/uuid"
 )
 
 type OrderInputDTO struct {
-	ID    string  `json:"id"`
 	Price float64 `json:"price"`
 	Tax   float64 `json:"tax"`
 }
@@ -38,7 +38,7 @@ func NewCreateOrderUseCase(
 
 func (c *CreateOrderUseCase) Execute(input OrderInputDTO) (OrderOutputDTO, error) {
 	order := entity.Order{
-		ID:    input.ID,
+		ID:    uuid.New().String(),
 		Price: input.Price,
 		Tax:   input.Tax,
 	}

@@ -34,6 +34,9 @@ tidy: ## Go mod tidy
 fmt: tidy ## Go mod tidy
 	$(GO_CMD) fmt ./...
 
+go-update-libs: fmt #Go update all libs
+	$(GO_CMD) get -u ./...
+
 test: fmt test-clean  ## Go test all project
 	$(GO_TEST) -cover -p=1 ./...
 
@@ -54,6 +57,9 @@ docker-compose-logs: ## Logs docker-compose containers of project
 docker-compose-ps: ## List docker-compose containers of project
 	$(DOCKER_COMPOSE_CMD) -f $(PATH_DOCKER_COMPOSE_FILE) ps
 
+graphql-install: ## Install graphql dependencies
+	$(GO_CMD) get -d github.com/99designs/gqlgen@v0.17.43
+
 graphql-generate: ## Generate graphql
 	$(GO_CMD) run github.com/99designs/gqlgen generate --verbose
 
@@ -65,3 +71,6 @@ grpc-check: ## Check if grpc has installed
 
 grpc-generate: ## Generate proto
 	protoc --go_out=. --go-grpc_out=. internal/infra/grpc/protofiles/order.proto
+
+grpc-run: ## Run evans grpc client
+	@evans -r repl -p 50051 internal/infra/grpc/protofiles/order.proto

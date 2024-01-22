@@ -14,7 +14,7 @@ services:
       - '3306:3306'
 
   rabbitmq:
-    image: rabbitmq:3-management
+    image: rabbitmq:3.12.12-management
     container_name: rabbitmq
     restart: always
     ports:
